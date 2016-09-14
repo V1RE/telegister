@@ -1,0 +1,11 @@
+{
+  "name": "telegister",
+  "version": "0.0.1",
+  "description": "Magister via Telgram bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Niels Mentink & Jasper Mulder",
+  "license": "ISC"
+}
