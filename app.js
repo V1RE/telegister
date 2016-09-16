@@ -1,8 +1,8 @@
 const Emoji = require('node-emoji').emoji;
-const Magister = require('magister.js');
-const Moment = require('moment');
 const Request = require('request');
 const TelegramBot = require('node-telegram-bot-api');
+
+eval(fs.readFileSync('telegister.js').toString());
 
 function mainbot (token) {
   bot = new TelegramBot(token, {polling: true});
@@ -20,6 +20,11 @@ function mainbot (token) {
     if (newuser == true){
       bot.sendMessage(fromId, "Hello there " + msg.from.first_name + " " + Emoji.smile);
       userobj.users.push({"id": fromId});
+      var curuser = userobj.users.filter(function (item) {
+        return item.id === fromId;
+      });
+      curuser[0].firstname = msg.from.first_name;
+      curuser[0].lastname = msg.from.last_name;
       fs.writeFileSync('./users.json', JSON.stringify(userobj, null, 2), 'utf-8');
     } else {
       bot.sendMessage(fromId, "Your account has already been initialised. " + Emoji.thumbsup);
@@ -36,6 +41,7 @@ function mainbot (token) {
         });
         curuser[0].prefix = resp;
         fs.writeFileSync('./users.json', JSON.stringify(userobj, null, 2), 'utf-8');
+        bot.sendMessage(msg.from.id, Emoji.bell + " School prefix: " + curuser[0].prefix);
       } else {
         bot.sendMessage(msg.from.id, Emoji.warning + "School prefix \"" + match[1] + "\" responded with an error...");
 //        TODO: add better explanation
@@ -51,6 +57,7 @@ function mainbot (token) {
     });
     curuser[0].uname = resp;
     fs.writeFileSync('./users.json', JSON.stringify(userobj, null, 2), 'utf-8');
+    bot.sendMessage(msg.from.id, Emoji.bell + " Username: " + curuser[0].uname);
   });
   
   bot.onText(/\/setpass (.+)/, function (msg, match) {
@@ -60,10 +67,16 @@ function mainbot (token) {
       return item.id === msg.from.id;
     });
     curuser[0].pword = resp;
-    fs.writeFileSync('./users.json', JSON.stringify(userobj,null, 2), 'utf-8');
+    fs.writeFileSync('./users.json', JSON.stringify(userobj, null, 2), 'utf-8');
+    bot.sendMessage(msg.from.id, Emoji.bell + " Password: " + curuser[0].pword);
   });
   
-//  bot.onText(/\/help/, function (msg, match) {
-//    
-//  })
+  bot.onText(/\/help/, function (msg, match) {
+    bot.sendMessage(msg.from.id, "Help menu");
+//    TODO: add help menu
+  });
+  
+  bot.onText(/\/schedule/, function (msg, match) {
+    getRooster(msg, bot);
+  });
 }

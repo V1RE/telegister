@@ -10,3 +10,7 @@ if (token.length > 0) {
   console.log("Usage: \"node index.js BOTTOKENHERE\"");
   process.exit(1);
 }
+
+process.on('uncaughtException', function (err) {
+  console.log('Caught exception: ' + err);
+});
