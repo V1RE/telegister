@@ -52,4 +52,18 @@ function mainbot (token) {
     curuser[0].uname = resp;
     fs.writeFileSync('./users.json', JSON.stringify(userobj, null, 2), 'utf-8');
   });
+  
+  bot.onText(/\/setpass (.+)/, function (msg, match) {
+    var resp = match[1];
+    var userobj = JSON.parse(fs.readFileSync('./users.json', 'utf-8'));
+    var curuser = userobj.users.filter(function (item) {
+      return item.id === msg.from.id;
+    });
+    curuser[0].pword = resp;
+    fs.writeFileSync('./users.json', JSON.stringify(userobj,null, 2), 'utf-8');
+  });
+  
+//  bot.onText(/\/help/, function (msg, match) {
+//    
+//  })
 }
