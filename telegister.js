@@ -15,7 +15,7 @@ function getRooster (msg, bot) {
     password: password
   }).ready(function (inlogerror) {
     if (!inlogerror) {
-      this.appointments(new Date(), function (error, result) {
+      this.appointments(new Date("9/19/2016"), function (error, result) {
         if (!error) {
           var fullmsg = Emoji.smiley + " Hello " + curuser[0].firstname + ", here's your schedule for today:\n\n";
           for (i = 0; i < result.length; i++) {
