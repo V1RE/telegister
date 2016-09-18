@@ -1,7 +1,7 @@
 const Magister = require('magister.js');
 const Moment = require('moment');
 
-function getRooster (msg, bot) {
+function getSchedule (msg, bot) {
   var userobj = JSON.parse(fs.readFileSync('./users.json', 'utf-8'));
   var curuser = userobj.users.filter(function (item) {
     return item.id === msg.from.id;
@@ -30,4 +30,40 @@ function getRooster (msg, bot) {
       bot.sendMessage(curuser[0].id, Emoji.warning + " We have an error:\n\n" + inlogerror);
     }
   });
+}
+
+function getHomework (msg, bot) {
+  var userobj = JSON.parse(fs.readFileSync('./users.json', 'utf-8'));
+  var curuser = userobj.users.filter(function (item) {
+    return item.id === msg.from.id;
+  });
+  var school = curuser[0].prefix;
+  var username = curuser[0].uname;
+  var password = curuser[0].pword;
+  
+  new Magister.Magister({
+    school: school,
+    username: username,
+    password: password
+  }).ready(function(inlogerror){
+    if (!inlogerror) {
+      this.appointments(new Date("9/19/2016"), function (error, result) {
+        if (!error) {
+          var fullmsg = Emoji.smiley + " Hello " + curuser[0].firstname + ", here's your homework for today:\n\n";
+          var counter = 0;
+          for (i = 0; i < result.length; i++) {
+            if (result[i].content() != "") {
+              counter++;
+              fullmsg += counter + ". " + result[i].classes()[0] + ": " + result[i].content() + "\n";
+            }
+          }
+          bot.sendMessage(curuser[0].id, fullmsg);
+        } else {
+          bot.sendMessage(curuser[0].id, Emoji.warning + " We have an error " + Emoji.warning + "\n" + error);
+        }
+      });
+    } else {
+      bot.sendMessage(curuser[0].id, Emoji.warning + " We have an error:\n\n" + inlogerror);
+    }
+  })
 }

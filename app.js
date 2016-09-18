@@ -77,6 +77,10 @@ function mainbot (token) {
   });
   
   bot.onText(/\/schedule/, function (msg, match) {
-    getRooster(msg, bot);
+    getSchedule(msg, bot);
+  });
+  
+  bot.onText(/\/homework/, function (msg, match) {
+    getHomework(msg, bot);
   });
 }
