@@ -86,5 +86,21 @@ function mainbot (token) {
 	
 	bot.onText(/\/finish/, function (msg, match) {
 		//todo add finish
-	})
+	});
+	
+	bot.onText(/\/grades/, function (msg, match) {
+//		new Magister.Magister({
+//			school: 'xxxx',
+//			username: 'xxxx',
+//			password: 'xxxx'
+//		}).ready(function () {
+//			this.currentCourse(function (error, result) {
+//				result.grades(function (error, result) {
+//					console.log(result.filter(function (item) {
+//							return item._type._type === 1;
+//					})[0]._grade);
+//				});
+//			});
+//		});
+	});
 }
