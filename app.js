@@ -31,22 +31,21 @@ function mainbot (token) {
     }
   });
   
-  bot.onText(/\/setschool ([a-z]+)/, function (msg, match) {
+  bot.onText(/\/setschool ([a-z ]+)/, function (msg, match) {
     var resp = match[1];
-    Request('https://' + resp + '.magister.net', function (error, response, body) {
-      if (!error && response.statusCode == 200) {
-        var userobj = JSON.parse(fs.readFileSync('./users.json', 'utf-8'));
-        var curuser = userobj.users.filter(function (item) {
+		Request('https://mijn.magister.net/api/schools?filter=' + resp, function (error, response, body) {
+			if (!error && response.statusCode == 200 && body != '[]') {
+				var userobj = JSON.parse(fs.readFileSync('./users.json', 'utf-8'));
+				var curuser = userobj.users.filter(function (item) {
           return item.id === msg.from.id;
         });
-        curuser[0].prefix = resp;
-        fs.writeFileSync('./users.json', JSON.stringify(userobj, null, 2), 'utf-8');
-        bot.sendMessage(msg.from.id, Emoji.bell + " School prefix: " + curuser[0].prefix);
-      } else {
-        bot.sendMessage(msg.from.id, Emoji.warning + "School prefix \"" + match[1] + "\" responded with an error...");
-//        TODO: add better explanation
-      }
-    });
+				curuser[0].prefix = JSON.parse(body)[0].Url.replace('https://', '').replace('.magister.net', '');
+				fs.writeFileSync('./users.json', JSON.stringify(userobj, null, 2), 'utf-8');
+				bot.sendMessage(msg.from.id, Emoji.bell + " School prefix: " + curuser[0].prefix);
+			} else {
+				bot.sendMessage(msg.from.id, Emoji.warning + " " + match[1] + " doesn't seem to exist...\nPlease try again.");
+			}
+		});
   });
   
   bot.onText(/\/setuser ([a-zA-Z0-9]+)/, function (msg, match) {
