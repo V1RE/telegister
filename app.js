@@ -83,4 +83,8 @@ function mainbot (token) {
   bot.onText(/\/homework/, function (msg, match) {
     getHomework(msg, bot);
   });
+	
+	bot.onText(/\/finish/, function (msg, match) {
+		//todo add finish
+	})
 }
