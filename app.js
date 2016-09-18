@@ -89,18 +89,20 @@ function mainbot (token) {
 	});
 	
 	bot.onText(/\/grades/, function (msg, match) {
-//		new Magister.Magister({
-//			school: 'xxxx',
-//			username: 'xxxx',
-//			password: 'xxxx'
-//		}).ready(function () {
-//			this.currentCourse(function (error, result) {
-//				result.grades(function (error, result) {
-//					console.log(result.filter(function (item) {
-//							return item._type._type === 1;
-//					})[0]._grade);
-//				});
-//			});
-//		});
+    getGrades(msg, bot);
 	});
+  
+  bot.onText(/\/menu/, function (msg) {
+  var chatId = msg.chat.id;
+  var opts = {
+      reply_markup: JSON.stringify({
+        keyboard: [
+          ['\/schedule'],
+          ['\/homework'],
+          ['\/help'],
+          ['\/grades']]
+      })
+    };
+    bot.sendMessage(chatId, "Here\'s a quick menu: ", opts);
+  });
 }
